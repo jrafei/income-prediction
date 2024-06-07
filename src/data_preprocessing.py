@@ -96,4 +96,4 @@ def get_cat_features(df):
     cat_features = df.select_dtypes('object').columns
     # ajout de education-num dans cat_features
     cat_features = cat_features.append(pd.Index(['education-num']))
-    return df
+    return cat_features

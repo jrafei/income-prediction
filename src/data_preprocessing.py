@@ -1,8 +1,16 @@
 import numpy as np
 import pandas as pd
+from sklearn.calibration import LabelEncoder
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
+
+def preprocess(df):
+    df = fix_target_variable(df)
+    df = remove_inutile_column(df)
+    df = transform_to_float(df)
+    df = drop_outliers(df)
+    return df
 
 def fix_target_variable(df):
     """
@@ -97,3 +105,30 @@ def get_cat_features(df):
     # ajout de education-num dans cat_features
     cat_features = cat_features.append(pd.Index(['education-num']))
     return cat_features
+
+
+def encode_cat_features(df_train,df_test, cat_features):
+    encoder = LabelEncoder()
+    for feature in cat_features:
+        df_train[feature] = encoder.fit_transform(df_train[feature])
+        df_test[feature] = encoder.transform(df_test[feature])
+    return df_train, df_test
+
+def drop_outliers(df):
+    """Remarque : la suppression des outliers doit etre faite après la division des données en train et test et avant la normalisation des données.
+    """
+    df = df[df['capital-gain'] < 40000.]
+    df = df[df['capital-loss'] < 4000.]
+
+    return df
+
+
+def add_image(plt,filename):
+    # Ajuster les marges pour que le titre soit complètement visible
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+    # Enregistrer le schéma dans le dossier 'images'
+    plot_filename = '../images/' + filename + '.png'
+    plt.savefig(plot_filename)  # Enregistre le schéma
+    plt.show()  # Affiche le schéma
+    plt.close()  # Ferme la figure pour éviter les conflits de figure

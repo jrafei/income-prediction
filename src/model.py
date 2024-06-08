@@ -6,7 +6,7 @@ Fonctions : train_random_forest(), train_logistic_regression(), train_svm(), sav
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from pipelines import get_logistic_regression_pipeline, get_random_forest_pipeline
+#from pipelines import get_logistic_regression_pipeline, get_random_forest_pipeline
 
 def train_model(pipeline, X, y, model_name):
     # Division des données en ensembles d'entraînement et de validation

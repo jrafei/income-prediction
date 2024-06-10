@@ -8,8 +8,9 @@ from sklearn.model_selection import train_test_split
 def preprocess(df):
     df = fix_target_variable(df)
     df = remove_inutile_column(df)
-    df = transform_to_float(df)
+    #df = transform_to_float(df)
     df = drop_outliers(df)
+    # supprimer les doublons [TODO]
     return df
 
 def fix_target_variable(df):
@@ -24,7 +25,7 @@ def fix_target_variable(df):
     """
     df['income'] = df['income'].str.replace('<=50K.', '<=50K')
     df['income'] = df['income'].str.replace('>50K.', '>50K')
-    df['>=50k'] = df['income'].apply(lambda x: 1 if x == '>50K' else 0)
+    df['>50K'] = df['income'].apply(lambda x: 1 if x == '>50K' else 0)
     df = df.drop(columns=['income'])
     return df
 
@@ -123,12 +124,7 @@ def drop_outliers(df):
     return df
 
 
-def add_image(plt,filename):
-    # Ajuster les marges pour que le titre soit complètement visible
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
-
-    # Enregistrer le schéma dans le dossier 'images'
-    plot_filename = '../images/' + filename + '.png'
-    plt.savefig(plot_filename)  # Enregistre le schéma
-    plt.show()  # Affiche le schéma
-    plt.close()  # Ferme la figure pour éviter les conflits de figure
+def getX_y(df):
+    X = df.drop(columns=['>50K'])
+    y = df['>50K']
+    return X, y

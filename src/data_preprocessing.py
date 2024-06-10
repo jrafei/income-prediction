@@ -4,7 +4,7 @@ from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 
-def fix_target_variable(df):
+def fix_target(data) :
     """
     Corrige la variable cible 'income' pour qu'elle prenne des valeurs binaires.
     
@@ -14,18 +14,16 @@ def fix_target_variable(df):
     Returns:
         pd.DataFrame: DataFrame avec la variable cible corrigée.
     """
-    df['income'] = df['income'].str.replace('<=50K.', '<=50K')
-    df['income'] = df['income'].str.replace('>50K.', '>50K')
-    df['>=50k'] = df['income'].apply(lambda x: 1 if x == '>50K' else 0)
-    df = df.drop(columns=['income'])
-    return df
+    data['income'] = data['income'].str.replace('<=50K.', '<=50K')
+    data['income'] = data['income'].str.replace('>50K.', '>50K')
+    data['>50K'] = data['income'].apply(lambda x: 1 if x == '>50K' else 0)
+    data = data.drop(columns=['income'])
+    return data
 
 
 def remove_inutile_column(df) :
     df = df.drop("education", axis=1)
     return df
-
-
 
 def impute_missing_cat_values(df,cat_features, strategy):
     """
@@ -36,8 +34,6 @@ def impute_missing_cat_values(df,cat_features, strategy):
         df[feature] = imput_cat.fit_transform(df[feature].values.reshape(-1,1)).ravel()
     
     return df
-
-
 
 def standardize(df_train,df_test, cont_features):
     scaleStd = StandardScaler()
@@ -62,7 +58,7 @@ def seperate_train_test(df,random_state):
     Returns:
         tuple: Un tuple contenant les ensembles d'entraînement et de test.
     """
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=random_state, stratify=df['>=50k'])
+    df_train, df_test = train_test_split(df, test_size=0.2, random_state=random_state, stratify=df['>50K'])
     return df_train, df_test
 
 

@@ -15,7 +15,7 @@ def preprocess(df):
     df = df.drop_duplicates()
     return df
 
-def fix_target(data) :
+def fix_target_variable(data) :
     """
     Corrige la variable cible 'income' pour qu'elle prenne des valeurs binaires.
     

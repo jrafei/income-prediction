@@ -12,7 +12,7 @@ def preprocess(df):
     df = remove_inutile_column(df)
     #df = transform_to_float(df)
     df = drop_outliers(df)
-    # supprimer les doublons [TODO]
+    df = df.drop_duplicates()
     return df
 
 def fix_target_variable(df):

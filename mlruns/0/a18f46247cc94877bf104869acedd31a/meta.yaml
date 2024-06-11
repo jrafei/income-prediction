@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTCPRET/Desktop/P24/AI28/Projet/ai28-income-prediction/mlruns/0/a18f46247cc94877bf104869acedd31a/artifacts
+end_time: 1717830792345
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a18f46247cc94877bf104869acedd31a
+run_name: Ridge
+run_uuid: a18f46247cc94877bf104869acedd31a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1717830789694
+status: 3
+tags: []
+user_id: UTCPRET

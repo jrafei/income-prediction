@@ -1,10 +1,21 @@
 import numpy as np
 import pandas as pd
+from sklearn.calibration import LabelEncoder
 from sklearn.discriminant_analysis import StandardScaler
+from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 
-def fix_target(data) :
+def preprocess(df):
+    df = fix_target_variable(df)
+    df = remove_inutile_column(df)
+    #df = transform_to_float(df)
+    df = drop_outliers(df)
+    df = df.drop_duplicates()
+    return df
+
+def fix_target_variable(data) :
     """
     Corrige la variable cible 'income' pour qu'elle prenne des valeurs binaires.
     
@@ -93,3 +104,52 @@ def get_cat_features(df):
     # ajout de education-num dans cat_features
     cat_features = cat_features.append(pd.Index(['education-num']))
     return cat_features
+
+
+def encode_cat_features(df_train,df_test, cat_features):
+    encoder = LabelEncoder()
+    for feature in cat_features:
+        df_train[feature] = encoder.fit_transform(df_train[feature])
+        df_test[feature] = encoder.transform(df_test[feature])
+    return df_train, df_test
+
+def drop_outliers(df):
+    """Remarque : la suppression des outliers doit etre faite après la division des données en train et test et avant la normalisation des données.
+    """
+    df = df[df['capital-gain'] < 40000.]
+    df = df[df['capital-loss'] < 4000.]
+
+    return df
+
+
+def getX_y(df):
+    X = df.drop(columns=['>50K'])
+    y = df['>50K']
+    return X, y
+
+
+def selectKbest(df_train, target_train, df_test, k=10):
+    """_summary_
+
+    Args:
+        df_train (dataframe): contenant que les features (sans la target)
+        target_train (_type_): _description_
+        df_test (dataframe): contenant que les features (sans la target)
+        k (int, optional): _description_. Defaults to 10.
+
+    Returns:
+        df_train_select: dataframe contenant les k features les plus importantes
+        df_test_select : dataframe contenant les k features les plus importantes
+        new_feature_names : liste des noms des k features les plus importantes
+    """
+    
+    select = SelectKBest(score_func=chi2, k=k)
+    select.fit_transform(df_train, target_train)
+    mask = select.get_support(indices=True)
+    new_feature_names = df_train.columns[mask]
+    # Reconstruire les ensembles train et test
+    df_train_select = df_train[new_feature_names]
+    df_test_select = df_test[new_feature_names]
+    return df_train_select, df_test_select, new_feature_names
+
+

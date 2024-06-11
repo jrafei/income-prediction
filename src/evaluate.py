@@ -29,7 +29,7 @@ def plot_confusion_matrix_sns(y_test, y_pred, model_name):
     # Affichage et enregistrement de la matrice de confusion avec Seaborn
     plt.figure(figsize=(8, 4))
     sns.heatmap(c_matrix, annot=True, fmt='d', cmap='Blues')
-    plt.title(f'Matrice de confusion - {model_name}')
+    plt.title(f'{model_name}')
     plt.xlabel('Predicted label')
     plt.ylabel('True label')
     save_image(plt,model_name)

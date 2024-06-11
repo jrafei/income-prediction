@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTCPRET/Desktop/P24/AI28/Projet/ai28-income-prediction/mlruns/0/1a75b628104142fea90ddf9a7d9a616f/artifacts
+end_time: 1718037695616
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1a75b628104142fea90ddf9a7d9a616f
+run_name: Lasso
+run_uuid: 1a75b628104142fea90ddf9a7d9a616f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1718037692437
+status: 3
+tags: []
+user_id: UTCPRET

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTCPRET/Desktop/P24/AI28/Projet/ai28-income-prediction/mlruns/0/8d1d6b4776b646c59ec882dc5605a118/artifacts
+end_time: 1718037400003
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8d1d6b4776b646c59ec882dc5605a118
+run_name: LinearRegression
+run_uuid: 8d1d6b4776b646c59ec882dc5605a118
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1718037390645
+status: 3
+tags: []
+user_id: UTCPRET

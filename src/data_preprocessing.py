@@ -2,8 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.calibration import LabelEncoder
 from sklearn.discriminant_analysis import StandardScaler
+from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 
 def preprocess(df):
     df = fix_target_variable(df)
@@ -71,7 +73,7 @@ def seperate_train_test(df,random_state):
     Returns:
         tuple: Un tuple contenant les ensembles d'entraînement et de test.
     """
-    df_train, df_test = train_test_split(df, test_size=0.2, random_state=random_state, stratify=df['>=50k'])
+    df_train, df_test = train_test_split(df, test_size=0.2, random_state=random_state, stratify=df['>50K'])
     return df_train, df_test
 
 
@@ -128,3 +130,30 @@ def getX_y(df):
     X = df.drop(columns=['>50K'])
     y = df['>50K']
     return X, y
+
+
+def selectKbest(df_train, target_train, df_test, k=10):
+    """_summary_
+
+    Args:
+        df_train (dataframe): contenant que les features (sans la target)
+        target_train (_type_): _description_
+        df_test (dataframe): contenant que les features (sans la target)
+        k (int, optional): _description_. Defaults to 10.
+
+    Returns:
+        df_train_select: dataframe contenant les k features les plus importantes
+        df_test_select : dataframe contenant les k features les plus importantes
+        new_feature_names : liste des noms des k features les plus importantes
+    """
+    
+    select = SelectKBest(score_func=chi2, k=k)
+    select.fit_transform(df_train, target_train)
+    mask = select.get_support(indices=True)
+    new_feature_names = df_train.columns[mask]
+    # Reconstruire les ensembles train et test
+    df_train_select = df_train[new_feature_names]
+    df_test_select = df_test[new_feature_names]
+    return df_train_select, df_test_select, new_feature_names
+
+

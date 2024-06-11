@@ -8,14 +8,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 
 def preprocess(df):
-    df = fix_target_variable(df)
+    df = fix_target(df)
     df = remove_inutile_column(df)
     #df = transform_to_float(df)
     df = drop_outliers(df)
     df = df.drop_duplicates()
     return df
 
-def fix_target_variable(data) :
+def fix_target(data) :
     """
     Corrige la variable cible 'income' pour qu'elle prenne des valeurs binaires.
     

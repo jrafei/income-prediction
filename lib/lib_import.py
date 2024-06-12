@@ -58,3 +58,5 @@ from sklearn.metrics import classification_report
 # SCHIKIT-LEARN: PIPELINE AND TRANSFORMATEURll
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import make_column_transformer
+
+print(f"Everything imported successfully.")

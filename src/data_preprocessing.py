@@ -36,15 +36,12 @@ def remove_inutile_column(df) :
     df = df.drop("education", axis=1)
     return df
 
-def impute_missing_cat_values(df,cat_features, strategy):
-    """
-    Remarque : df est le dataframe test ou train (et pas le dataframe complet risque de fuite de données)
-    """
+def impute_missing_cat_values(df_train,df_test,cat_features, strategy):
     imput_cat = SimpleImputer(missing_values=np.nan, strategy=strategy)
     for feature in cat_features :
-        df[feature] = imput_cat.fit_transform(df[feature].values.reshape(-1,1)).ravel()
-    
-    return df
+        df_train[feature] = imput_cat.fit_transform(df_train[feature].values.reshape(-1,1)).ravel()
+        df_test[feature] = imput_cat.transform(df_test[feature].values.reshape(-1,1)).ravel()
+    return df_train, df_test
 
 def standardize(df_train,df_test, cont_features):
     scaleStd = StandardScaler()

@@ -11,5 +11,6 @@ def execute_files(file_list):
             print(f"An error occurred while executing {file}: {e}")
 
 if __name__ == "__main__":
+    print("Executing files...")
     files_to_execute = ['lib/lib_install.py', 'lib/lib_import.py', 'data/data_extract.py']
     execute_files(files_to_execute)

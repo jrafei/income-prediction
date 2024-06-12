@@ -25,6 +25,9 @@ pd.set_option("display.max_rows", None, "display.max_columns", None)
 # SEABORN
 import seaborn as sns
 
+# MISSINGNO
+import missingno as msno
+
 # SCIKIT-LEARN: SELECTION DE VARIABLES
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
@@ -58,5 +61,7 @@ from sklearn.metrics import classification_report
 # SCHIKIT-LEARN: PIPELINE AND TRANSFORMATEURll
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import make_column_transformer
+
+import importlib
 
 print(f"Everything imported successfully.")

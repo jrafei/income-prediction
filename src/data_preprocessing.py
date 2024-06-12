@@ -48,10 +48,12 @@ def impute_missing_cat_values(df,cat_features, strategy):
 
 def standardize(df_train,df_test, cont_features):
     scaleStd = StandardScaler()
+    
     for feature in cont_features:
         # Normaliser les données d'entrainement
         df_train[feature] = scaleStd.fit_transform(df_train[feature].values.reshape(-1,1))
         df_train[feature] = df_train[feature].ravel()
+
         # Normaliser les données test
         df_test[feature] = scaleStd.transform(df_test[feature].values.reshape(-1,1))
         df_test[feature] = df_test[feature].ravel()

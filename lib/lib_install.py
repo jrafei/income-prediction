@@ -19,7 +19,8 @@ packages = [
     "seaborn",
     "scikit-learn",
     "plotly",
-    "ucimlrepo"
+    "ucimlrepo",
+    "missingno"
 ]
 
 for package in packages:

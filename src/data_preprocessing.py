@@ -10,9 +10,8 @@ from sklearn.pipeline import Pipeline
 def preprocess(df):
     df = fix_target(df)
     df = remove_inutile_column(df)
-    #df = transform_to_float(df)
     df = drop_outliers(df)
-    df = df.drop_duplicates()
+    #df = df.drop_duplicates()
     return df
 
 def fix_target(data) :
@@ -31,9 +30,9 @@ def fix_target(data) :
     data = data.drop(columns=['income'])
     return data
 
-
 def remove_inutile_column(df) :
     df = df.drop("education", axis=1)
+    df = df.drop("fnlwgt", axis=1)
     return df
 
 def impute_missing_cat_values(df,cat_features, strategy):
@@ -98,7 +97,7 @@ def get_column_min_max(df, column_name):
 
 
 def get_cont_features(df):
-    cont_features = df.select_dtypes('float64').columns
+    cont_features = df.select_dtypes('int64').columns
     return cont_features
 
 def get_cat_features(df):

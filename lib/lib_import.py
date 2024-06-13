@@ -44,6 +44,13 @@ from sklearn.impute import KNNImputer
 # SCIKIT-LEARN: MODELES
 from sklearn.linear_model import LogisticRegression
 
+## ARBRES, FORETS, APRRENTISSAGE D'ENSEMBLE
+from sklearn.tree import DecisionTreeClassifier # arbres classification
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier 
+
 # SCIKIT-LEARN: VALIDATION CROISEE + OPTIMISATION
 from sklearn.model_selection import train_test_split # Séparer en données train et test
 from sklearn.model_selection import cross_val_score # Validation croisée pour comparison entre modèles

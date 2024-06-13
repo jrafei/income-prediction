@@ -20,7 +20,8 @@ packages = [
     "scikit-learn",
     "plotly",
     "ucimlrepo",
-    "missingno"
+    "missingno",
+    "imblearn"
 ]
 
 for package in packages:

@@ -69,6 +69,9 @@ from sklearn.metrics import classification_report
 from sklearn.pipeline import make_pipeline
 from sklearn.compose import make_column_transformer
 
+# IMBLEARN: SAMPLING
+from imblearn.over_sampling import SMOTE
+
 import importlib
 
 print(f"Everything imported successfully.")

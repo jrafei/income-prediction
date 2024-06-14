@@ -6,12 +6,16 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
 
 def preprocess(df):
     df = fix_target(df)
     df = remove_inutile_column(df)
     df = drop_outliers(df)
+    #df = transform_to_float(df)
     #df = df.drop_duplicates()
+    df = regroupe_categories(df)
+    
     return df
 
 def fix_target(data) :
@@ -41,6 +45,8 @@ def impute_missing_cat_values(df_train,df_test,cat_features, strategy):
         df_train[feature] = imput_cat.fit_transform(df_train[feature].values.reshape(-1,1)).ravel()
         df_test[feature] = imput_cat.transform(df_test[feature].values.reshape(-1,1)).ravel()
     return df_train, df_test
+
+
 
 def standardize(df_train,df_test, cont_features):
     scaleStd = StandardScaler()
@@ -95,6 +101,8 @@ def get_column_min_max(df, column_name):
 
 def get_cont_features(df):
     cont_features = df.select_dtypes('int64').columns
+    ## supprimer 50K
+    cont_features = cont_features.drop('>50K')
     return cont_features
 
 def get_cat_features(df):
@@ -111,6 +119,34 @@ def encode_cat_features(df_train,df_test, cat_features):
         df_test[feature] = encoder.transform(df_test[feature])
     return df_train, df_test
 
+
+
+
+
+def encode_cat_features_onehot(df_train, df_test, cat_features):
+    encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+    
+    # Fit the encoder on the training data and transform both train and test data
+    df_train_encoded = encoder.fit_transform(df_train[cat_features])
+    df_test_encoded = encoder.transform(df_test[cat_features])
+    
+    # Get the feature names after encoding
+    encoded_feature_names = encoder.get_feature_names_out(cat_features)
+    
+    # Convert the numpy arrays returned by the encoder to dataframes
+    df_train_encoded = pd.DataFrame(df_train_encoded, columns=encoded_feature_names)
+    df_test_encoded = pd.DataFrame(df_test_encoded, columns=encoded_feature_names)
+    
+    # Drop the original categorical columns and concatenate the new one-hot encoded columns
+    df_train = df_train.drop(cat_features, axis=1)
+    df_test = df_test.drop(cat_features, axis=1)
+    
+    df_train = pd.concat([df_train.reset_index(drop=True), df_train_encoded.reset_index(drop=True)], axis=1)
+    df_test = pd.concat([df_test.reset_index(drop=True), df_test_encoded.reset_index(drop=True)], axis=1)
+    
+    return df_train, df_test
+
+
 def drop_outliers(df):
     """Remarque : la suppression des outliers doit etre faite après la division des données en train et test et avant la normalisation des données.
     """
@@ -119,6 +155,36 @@ def drop_outliers(df):
 
     return df
 
+
+def regroupe_categories(df):
+    df['workclass'] = df['workclass'].replace({'?': 'Not referenced'})
+    df['native-country'] = df['native-country'].replace({'?': 'Not referenced'})
+    df['occupation'] = df['occupation'].replace({'?': 'Not referenced'})
+    # Regroup 'Without-pay' and 'Never-worked' to 'No revenu'
+    df['workclass'] = df['workclass'].replace({'Without-pay': 'No revenu', 'Never-worked': 'No revenu'})
+
+    # Regrouper 'Self-emp-not-inc' and 'Self-emp-inc' to 'Self-emp'
+    df['workclass'] = df['workclass'].replace({'Self-emp-not-inc': 'Self-emp', 'Self-emp-inc': 'Self-emp'})
+        
+    df['marital-status'] = df['marital-status'].replace({'Divorced': 'Now Single', 'Separated': 'Now Single', 'Widowed': 'Now Single'})
+
+    df['marital-status'] = df['marital-status'].replace({'Married-civ-spouse': 'Married', 'Married-AF-spouse': 'Married'})
+     
+    df['relationship'] = df['relationship'].replace({'Husband': 'Married', 'Wife': 'Married'})
+     
+    df['race'] = df['race'].replace({'Amer-Indian-Eskimo': 'Other'})
+   
+    # Counting for each value of the variable 'native-country' the number of individuals who have this value
+    filtered = df[df['native-country'] != 'United-States']
+
+    for country in filtered['native-country'].unique():
+        nb_samples_associated = filtered[filtered['native-country'] == country].shape[0]
+        if nb_samples_associated < 200:
+            df['native-country'] = df['native-country'].replace({country: 'Other'})
+    
+            
+    return df
+        
 
 def getX_y(df):
     X = df.drop(columns=['>50K'])

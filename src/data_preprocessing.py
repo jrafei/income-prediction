@@ -15,7 +15,6 @@ def preprocess(df):
     #df = transform_to_float(df)
     #df = df.drop_duplicates()
     df = regroupe_categories(df)
-    
     return df
 
 def fix_target(data) :

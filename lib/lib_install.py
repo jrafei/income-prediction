@@ -21,9 +21,12 @@ packages = [
     "plotly",
     "ucimlrepo",
     "missingno",
-    "imblearn"
+    "imblearn",
+    "joblib"
 ]
 
 for package in packages:
     install(package)
     check_installation(package)
+    
+    

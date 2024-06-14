@@ -73,5 +73,13 @@ from sklearn.compose import make_column_transformer
 from imblearn.over_sampling import SMOTE
 
 import importlib
+import joblib
+
+
+# Modélisation
+from imblearn.pipeline import Pipeline as ImbPipeline
+from imblearn.over_sampling import SMOTE
+
+from yellowbrick.model_selection import LearningCurve
 
 print(f"Everything imported successfully.")

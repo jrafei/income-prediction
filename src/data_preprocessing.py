@@ -10,12 +10,11 @@ from sklearn.preprocessing import OneHotEncoder
 
 def preprocess(df):
     df = fix_target(df)
+    df = df.drop_duplicates()
     df = remove_inutile_column(df)
     df = drop_outliers(df)
     #df = transform_to_float(df)
-    #df = df.drop_duplicates()
     df = regroupe_categories(df)
-    
     return df
 
 def fix_target(data) :
@@ -120,9 +119,6 @@ def encode_cat_features(df_train,df_test, cat_features):
     return df_train, df_test
 
 
-
-
-
 def encode_cat_features_onehot(df_train, df_test, cat_features):
     encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
     
@@ -215,5 +211,3 @@ def selectKbest(df_train, target_train, df_test, k=10):
     df_train_select = df_train[new_feature_names]
     df_test_select = df_test[new_feature_names]
     return df_train_select, df_test_select, new_feature_names
-
-

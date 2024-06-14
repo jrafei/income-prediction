@@ -12,9 +12,8 @@ def preprocess(df):
     df = fix_target(df)
     df = remove_inutile_column(df)
     df = drop_outliers(df)
-    #df = transform_to_float(df)
-    #df = df.drop_duplicates()
     df = regroupe_categories(df)
+    df = df.drop_duplicates()
     return df
 
 def fix_target(data) :
@@ -35,7 +34,7 @@ def fix_target(data) :
 
 def remove_inutile_column(df) :
     df = df.drop("education", axis=1)
-    df = df.drop("fnlwgt", axis=1)
+    
     return df
 
 def impute_missing_cat_values(df_train,df_test,cat_features, strategy):

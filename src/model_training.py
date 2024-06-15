@@ -4,33 +4,47 @@ Fonctions : train_random_forest(), train_logistic_regression(), train_svm(), sav
 """
 
 import joblib
-from sklearn.model_selection import train_test_split
+import pandas as pd
+from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import accuracy_score
 #from pipelines import get_logistic_regression_pipeline, get_random_forest_pipeline
 
-def train_model(pipeline, X, y, model_name):
-    # Division des données en ensembles d'entraînement et de validation
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+def train_predict_model_adaboost(pipeline, df_train, df_test, model_name):
     
+    y_train = df_train['>50K'].values
+    y_test = df_test['>50K'].values
+
     # Entraînement du modèle
-    pipeline.fit(X_train, y_train)
+    pipeline_fitted = pipeline.fit(df_train, y_train)
+    
+    # Obtenir les données transformées avant l'entraînement
+    test = pipeline.named_steps['preprocessor']
+    print(test.shape())
+    X_train_transformed = test.transform(df_train.drop(columns=['>50K']))
+    feature_names = test.get_feature_names_out()
+    df_train_transformed = pd.DataFrame(X_train_transformed, columns=feature_names)
+    
     
     # Prédictions sur les données de validation
-    y_pred = pipeline.predict(X_val)
+    y_pred = pipeline_fitted.predict(df_test)
     
     # Évaluation du modèle
-    accuracy = accuracy_score(y_val, y_pred)
+    accuracy = accuracy_score(y_test, y_pred)
     print(f"Accuracy for {model_name}: {accuracy}")
     
     # Sauvegarde du modèle entraîné
-    joblib.dump(pipeline, f'../models/{model_name}/model.pkl')
+    joblib.dump(pipeline_fitted, f'../models/{model_name}.pkl')
     
-    return pipeline, accuracy
+    return pipeline_fitted, y_test, y_pred, df_train_transformed
 
-def train_logistic_regression(X, y):
-    pipeline = get_logistic_regression_pipeline()
-    return train_model(pipeline, X, y, 'logistic_regression')
-
-def train_random_forest(X, y):
-    pipeline = get_random_forest_pipeline()
-    return train_model(pipeline, X, y, 'random_forest')
+def best_param_grid_search(model, X_train_up,y_train_up, X_train, y_train, model_name): 
+    param_grid = {'C': [0.001, 0.01, 0.1, 1., 10.], 'max_iter': [100, 200, 300]}
+    grid = GridSearchCV(model, param_grid, verbose=False, n_jobs=1, return_train_score=True, scoring='f1')
+    grid.fit(X_train_up, y_train_up)
+    print("meilleur parametres : ",grid.best_params_)
+    grid_model= grid.best_estimator_
+    grid_model_fitted = grid_model.fit(X_train, y_train)
+    # Sauvegardez le modèle dans un fichier apres entrainement
+    joblib.dump(grid_model_fitted, '../models/'+model_name+'_fitted.pkl')
+    
+    return grid_model,grid_model_fitted

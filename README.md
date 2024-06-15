@@ -18,3 +18,8 @@ Il suffit de re-installer cette librairie avec :
 pip uninstall imbalanced-learn -y; pip install imbalanced-learn
 ```
 
+## Librairie à installer
+```
+pip install yellowbrick
+pip install xgboost
+```

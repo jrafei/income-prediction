@@ -81,5 +81,8 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
 
 from yellowbrick.model_selection import LearningCurve
+# XGBoost
+from xgboost import XGBClassifier, XGBRFClassifier
+from xgboost import plot_tree, plot_importance
 
 print(f"Everything imported successfully.")

@@ -22,7 +22,10 @@ packages = [
     "ucimlrepo",
     "missingno",
     "imblearn",
-    "joblib"
+    "joblib",
+    "yellowbrick",
+    "xgboost",
+    'optuna'
 ]
 
 for package in packages:

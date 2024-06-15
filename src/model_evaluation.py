@@ -17,6 +17,9 @@ def plot_confusion_matrix_sns(y_test, y_pred, model_name):
     """
     Affiche la matrice de confusion pour les prédictions d'un modèle.
     """
+    """
+    Affiche la matrice de confusion pour les prédictions d'un modèle.
+    """
 
     print('='*30)
     print(model_name)
@@ -29,13 +32,27 @@ def plot_confusion_matrix_sns(y_test, y_pred, model_name):
     print(classification_report(y_test, y_pred), '\n')
     print('Exactitude: %f' %(accuracy_score(y_test, y_pred)*100), '\n')
 
-    # Affichage et enregistrement de la matrice de confusion avec Seaborn
+    # Affichage et enregistrement de la matrice de confusion avec Matplotlib
     plt.figure(figsize=(8, 4))
-    sns.heatmap(c_matrix, annot=True, fmt='d', cmap='Blues')
+    plt.imshow(c_matrix, interpolation='nearest', cmap='Blues')
     plt.title(f'{model_name}')
+    plt.colorbar()
+
+    tick_marks = np.arange(len(set(y_test)))
+    plt.xticks(tick_marks, tick_marks)
+    plt.yticks(tick_marks, tick_marks)
+
     plt.xlabel('Predicted label')
     plt.ylabel('True label')
-    save_image(plt,model_name)
+
+    # Ajouter les annotations
+    thresh = c_matrix.max() / 2.
+    for i, j in np.ndindex(c_matrix.shape):
+        plt.text(j, i, format(c_matrix[i, j], 'd'),
+                 horizontalalignment="center",
+                 color="white" if c_matrix[i, j] > thresh else "black")
+
+    save_image(plt, model_name)
 
    
 def save_image(plt,filename):
@@ -70,9 +87,9 @@ def print_score_validation(model, X_train_up, y_train_up, list_hyperparams, mode
     
 
 
-def print_courbe_apprentissage(model, X_train_up, y_train_up, model_name): 
+def print_courbe_apprentissage(model, X_train_up, y_train_up, model_name,score): 
     N, train_score, val_score = learning_curve(model, X_train_up, y_train_up, 
-                                           cv=5, scoring='f1',
+                                           cv=5, scoring=score,
                                            train_sizes=np.linspace(0.1, 1, 10))
 
     plt.figure(figsize=(12,8))

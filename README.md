@@ -41,9 +41,11 @@ This project is part of the AI28 Machine Learning course at the University of Te
    cd income-prediction
       
 2. Install the necessary libraries:
-  ```bash
+   ```bash
    pip install -r requirements.txt
-
-3. Run the project:
+4. Run the project:
   ```bash
   python run_project.py
+  
+
+

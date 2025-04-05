@@ -31,7 +31,7 @@ This project is part of the AI28 Machine Learning course at the University of Te
    - Models evaluated using precision, recall, and F1-score.
 
 4. **Best Model**:
-   - XGBoost achieved the highest performance with an F1-score of 0.69 for the target class `>50K`.
+   - XGBoost achieved the highest performance with an F1-score of 0.8 for the target class `>50K`.
 
 ## How to Run
 
